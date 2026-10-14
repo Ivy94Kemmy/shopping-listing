@@ -24,18 +24,87 @@ const totalSpent = document.getElementById("totalSpent");
 const addButton = document.getElementById("addButton");
 const clearButton = document.getElementById("clearButton");
 
-addButton.addEventListener("click", addProduct);
-let products = JSON.parse(localStorage.getItem("shopping products")) || [];
+let products = [];
 
-[productName, productPrice].forEach(function (input) {
-    input.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            addProduct();
-        }
+try {
+    products = JSON.parse(
+        localStorage.getItem("shoppingProducts") || "[]"
+    );
+
+    if (!Array.isArray(products)) {
+        products = [];
+    }
+
+    products = products.map(function (product) {
+        return {
+            name: product.name,
+            price: Number(product.price),
+            purchased: product.purchased === true
+        };
     });
-});
+} catch (error) {
+    products = [];
+}
 
-function addProduct() {
+function saveProducts() {
+    localStorage.setItem(
+        "shoppingProducts",
+        JSON.stringify(products)
+    );
+}
+
+function displayProducts() {
+    shoppingList.innerHTML = "";
+
+    let total = 0;
+
+    products.forEach(function (product, index) {
+        const li = document.createElement("li");
+
+        const name = document.createElement("span");
+
+        name.textContent =
+            `${product.name} - KSh ${product.price.toFixed(2)}`;
+
+        if (product.purchased) {
+            name.style.textDecoration = "line-through";
+            name.style.color = "gray";
+        }
+
+        const purchasedButton = document.createElement("button");
+
+        purchasedButton.textContent = product.purchased
+            ? "Mark Unpurchased"
+            : "Mark Purchased";
+
+        purchasedButton.addEventListener("click", function () {
+            products[index].purchased = !products[index].purchased;
+
+            saveProducts();
+            displayProducts();
+        });
+
+        const deleteButton = document.createElement("button");
+
+        deleteButton.textContent = "Delete";
+
+        deleteButton.addEventListener("click", function () {
+            products.splice(index, 1);
+
+            saveProducts();
+            displayProducts();
+        });
+
+        li.append(name, purchasedButton, deleteButton);
+
+        shoppingList.appendChild(li);
+        total += product.price;
+    });
+
+    totalSpent.textContent = total.toFixed(2);
+}
+
+addButton.addEventListener("click", function () {
     const name = productName.value.trim();
     const priceText = productPrice.value.trim();
     const price = Number(priceText);
@@ -45,51 +114,46 @@ function addProduct() {
         return;
     }
 
-    if (priceText === "" || !Number.isFinite(price) || price < 0) {
+    if (
+        priceText === "" ||
+        !Number.isFinite(price) ||
+        price < 0
+    ) {
         alert("Please enter a valid price.");
         return;
     }
 
-    const li = document.createElement("li");
-    li.dataset.price = price;
-
-    const details = document.createElement("span");
-    details.className = "product-details";
-    details.textContent = `${name} - KSh ${price.toFixed(2)}`;
-
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
-    deleteButton.className = "delete-button";
-
-    deleteButton.addEventListener("click", function () {
-        li.remove();
-        calculateTotal();
+    products.push({
+        name: name,
+        price: price,
+        purchased: false
     });
 
-    li.append(details, deleteButton);
-    shoppingList.appendChild(li);
+    try {
+        saveProducts();
+    } catch (error) {
+        alert("Could not save your shopping list.");
+        products.pop();
+        return;
+    }
 
     productName.value = "";
     productPrice.value = "";
-    productName.focus();
-    calculateTotal();
-}
 
-function calculateTotal() {
-    let total = 0;
-
-    shoppingList.querySelectorAll("li").forEach(function (item) {
-        total += Number(item.dataset.price);
-    });
-
-    totalSpent.textContent = total.toLocaleString("en-KE", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-}
-
+    displayProducts();
+});
 
 clearButton.addEventListener("click", function () {
-    shoppingList.innerHTML = "";
-    calculateTotal();
+    const confirmClear = confirm(
+        "Are you sure you want to clear your entire shopping list?"
+    );
+
+    if (confirmClear) {
+        products = [];
+
+        saveProducts();
+        displayProducts();
+    }
 });
+
+displayProducts();
