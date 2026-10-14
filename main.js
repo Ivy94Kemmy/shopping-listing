@@ -7,7 +7,13 @@ let shoppinglist = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 // save the current shopping list so it is available after a page reload
 function saveItems() {
     // convert the array into text because localStorage stores string values
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(shoppinglist));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(Myshoppinglist));
+    // Check whether shopping data exists in Local Storage
+if (localStorage.getItem("shoppingProducts") !== null) {
+    products = JSON.parse(localStorage.getItem("shoppingProducts"));
+} else {
+    products = [];
+}
 }
 
 const productName = document.getElementById("productName");
