@@ -1,5 +1,15 @@
+// used to save and load this shopping list in the browser
+const STORAGE_KEY = "shopping-list-items";
 
-// Get elements from the HTML
+// restore the saved list, or start with an empty list if nothing is saved yet
+let shoppinglist = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+// save the current shopping list so it is available after a page reload
+function saveItems() {
+    // convert the array into text because localStorage stores string values
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(shoppinglist));
+}
+
 const productName = document.getElementById("productName");
 const productPrice = document.getElementById("productPrice");
 const shoppingList = document.getElementById("shoppingList");
@@ -8,10 +18,9 @@ const totalSpent = document.getElementById("totalSpent");
 const addButton = document.getElementById("addButton");
 const clearButton = document.getElementById("clearButton");
 
-// Add a product when the button is clicked
 addButton.addEventListener("click", addProduct);
+let products = JSON.parse(localStorage.getItem("shopping products")) || [];
 
-// Allow Enter to add a product
 [productName, productPrice].forEach(function (input) {
     input.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
@@ -25,7 +34,6 @@ function addProduct() {
     const priceText = productPrice.value.trim();
     const price = Number(priceText);
 
-    // Check that the name and price are valid
     if (name === "") {
         alert("Please enter a product name.");
         return;
@@ -36,18 +44,13 @@ function addProduct() {
         return;
     }
 
-    // Create a new list item
     const li = document.createElement("li");
-
-    // Save the price for calculating the total
     li.dataset.price = price;
 
-    // Display the product name and price
     const details = document.createElement("span");
     details.className = "product-details";
     details.textContent = `${name} - KSh ${price.toFixed(2)}`;
 
-    // Create a delete button for this product
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.className = "delete-button";
@@ -57,20 +60,15 @@ function addProduct() {
         calculateTotal();
     });
 
-    // Add the product details and delete button
     li.append(details, deleteButton);
     shoppingList.appendChild(li);
 
-    // Clear the fields for the next product
     productName.value = "";
     productPrice.value = "";
     productName.focus();
-
-    // Update the total
     calculateTotal();
 }
 
-// Calculate the total of all products
 function calculateTotal() {
     let total = 0;
 
@@ -84,7 +82,7 @@ function calculateTotal() {
     });
 }
 
-// Clear the entire shopping list
+
 clearButton.addEventListener("click", function () {
     shoppingList.innerHTML = "";
     calculateTotal();

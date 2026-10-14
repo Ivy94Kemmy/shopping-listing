@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Shopping List</title>
     <link rel="stylesheet" href="style.css">
-    <script src="main.js"></script>
+    <script src="main.js" defer></script>
 </head>
 <body>
 
     <div class="container">
         <h1>🛒 My Shopping List</h1>
         <p class="subtitle">Keep track of your shopping expenses.</p>
-
-        <!-- Product input form -->
         <div class="input-section">
             <input
                 type="text"
@@ -32,11 +30,9 @@
             <button id="addButton">Add Product</button>
         </div>
 
-        <!-- Shopping list -->
         <h2>Your Products</h2>
         <ul id="shoppingList"></ul>
 
-        <!-- Total amount spent -->
         <div class="total-section">
             <h2>Total Spent</h2>
             <p>KSh <span id="totalSpent">0.00</span></p>
