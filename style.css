@@ -1,0 +1,125 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fceef3;
+    margin: 0;
+    padding: 30px 15px;
+    color: #333;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #c43d75;
+}
+
+.subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #c43d75;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #a72d61;
+}
+
+h2 {
+    color: #c43d75;
+    font-size: 20px;
+}
+
+#shoppingList {
+    list-style: none;
+    padding: 0;
+}
+
+#shoppingList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+    background-color: #fff5f8;
+    border-radius: 6px;
+    border: 1px solid #f4dce6;
+}
+
+.product-details {
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
+.delete-button {
+    background-color: #777;
+    padding: 8px 10px;
+}
+
+.delete-button:hover {
+    background-color: #555;
+}
+
+.total-section {
+    margin-top: 25px;
+    padding: 15px;
+    text-align: center;
+    background-color: #fceef3;
+    border-radius: 8px;
+}
+
+.total-section p {
+    font-size: 25px;
+    font-weight: bold;
+    color: #c43d75;
+    margin-bottom: 5px;
+}
+
+.clear-button {
+    width: 100%;
+    margin-top: 15px;
+    background-color: #777;
+}
+
+.clear-button:hover {
+    background-color: #555;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 18px;
+    }
+
+    #shoppingList li {
+        padding: 10px;
+    }
+}
